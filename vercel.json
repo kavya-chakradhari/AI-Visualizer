@@ -1,5 +1,5 @@
 {
   "installCommand": "npm install",
-  "buildCommand": "npm run build -w @ai-vis/types && npm run build -w frontend",
+  "buildCommand": "cd packages/types && npm run build && cd ../../ && cd frontend && npm run build",
   "outputDirectory": "frontend/dist"
 }
