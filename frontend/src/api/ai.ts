@@ -1,6 +1,5 @@
 import type { AIMessageResult, CommandInput } from "@ai-vis/types";
-
-const BASE_URL = import.meta.env.VITE_API_URL || "/api";
+import { BASE_URL } from "./config.js";
 
 /** Falls back to a structured failure if the response body isn't the shape we expect. */
 function asAIMessageResult(body: unknown, res: Response): AIMessageResult {

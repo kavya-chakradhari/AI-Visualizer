@@ -1,7 +1,8 @@
 import type { HealthResponse } from "@ai-vis/types";
+import { BASE_URL } from "./config.js";
 import { uploadDataset, fetchDataset, listDatasets } from "./datasets.js";
 
-const BASE_URL = import.meta.env.VITE_API_URL || "/api";
+export { BASE_URL } from "./config.js";
 
 export async function fetchHealth(): Promise<HealthResponse> {
   const response = await fetch(`${BASE_URL}/health`);

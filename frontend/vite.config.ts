@@ -3,6 +3,8 @@ import react from "@vitejs/plugin-react";
 import path from "path";
 
 // https://vitejs.dev/config/
+const backendTarget = process.env.BACKEND_URL || "http://localhost:4000";
+
 export default defineConfig({
   plugins: [react()],
   resolve: {
@@ -36,7 +38,7 @@ export default defineConfig({
     port: 5173,
     proxy: {
       "/api": {
-        target: "http://localhost:4000",
+        target: backendTarget,
         changeOrigin: true,
         // When the backend isn't running yet (very first `npm run dev` before
         // it finishes compiling, or it crashed), Vite's default proxy error
@@ -59,7 +61,7 @@ export default defineConfig({
                 error: {
                   code: "BACKEND_UNREACHABLE",
                   message:
-                    "Cannot reach the backend server at http://localhost:4000. " +
+                    `Cannot reach the backend server at ${backendTarget}. ` +
                     "Make sure it's running (`npm run dev:backend`, or `npm run dev` " +
                     "to start both) and try again." +
                     (err?.message ? ` (${err.message})` : ""),

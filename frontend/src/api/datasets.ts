@@ -5,8 +5,7 @@ import type {
   DatasetUploadResponse,
 } from "@ai-vis/types";
 import { readApiError } from "./errors.js";
-
-const BASE_URL = import.meta.env.VITE_API_URL || "/api";
+import { BASE_URL } from "./config.js";
 
 /**
  * Uploads a .csv or .xlsx file to the backend data ingestion pipeline.

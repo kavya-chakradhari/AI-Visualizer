@@ -8,8 +8,7 @@ import type {
   DashboardState,
 } from "@ai-vis/types";
 import { readApiError } from "./errors.js";
-
-const BASE_URL = import.meta.env.VITE_API_URL || "/api";
+import { BASE_URL } from "./config.js";
 
 export interface DashboardSummary {
   id: string;
