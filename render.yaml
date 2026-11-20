@@ -1,0 +1,25 @@
+# Render Blueprint for the demo backend (free plan, ephemeral disk — data resets on restart).
+services:
+  - type: web
+    name: ai-visualizer-backend
+    runtime: node
+    plan: free
+    buildCommand: npm install --include=dev && npm run build -w @ai-vis/types && npm run build -w backend
+    startCommand: npm run prisma:push -w backend && npm run start -w backend
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        value: file:./dev.db
+      - key: AI_PROVIDER
+        value: groq
+      - key: GROQ_MODEL
+        value: openai/gpt-oss-120b
+      - key: AUTH_ENABLED
+        value: "false"
+      # Set these two in the Render dashboard (sync: false = not stored in git):
+      - key: GROQ_API_KEY
+        sync: false
+      - key: CORS_ORIGIN
+        sync: false

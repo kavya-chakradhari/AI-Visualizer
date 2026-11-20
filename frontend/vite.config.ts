@@ -22,7 +22,7 @@ export default defineConfig({
           // UI utilities
           "vendor-ui": ["lucide-react", "clsx"],
           // State management & immutability
-          "vendor-state": ["zustand", "immer"],
+          "vendor-state": ["zustand"],
           // Schema validation
           "vendor-zod": ["zod"],
         },

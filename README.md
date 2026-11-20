@@ -6,6 +6,12 @@ both paths go through the exact same validated command pipeline, so nothing
 the AI does is any less safe or reversible than a manual edit. Full undo/redo,
 a themeable UI, and PNG/CSV export round out this MVP-complete slice.
 
+## Live demo
+
+> **Demo:** _add your Vercel URL here after deploying_
+>
+> The backend runs on a free Render instance that sleeps when idle — the first load can take ~30–60 s. Use the built-in sample datasets on the upload screen, or upload your own CSV/XLSX, then try prompts like "bar chart of sales by region".
+
 ## Monorepo layout
 
 ```
