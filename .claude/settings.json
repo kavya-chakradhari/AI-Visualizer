@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm test *)",
+      "Bash(curl -s -o /dev/null -w \"dev NODE_ENV -> execute: %{http_code}\\\\n\" -X POST http://localhost:4123/api/commands/execute -H 'Content-Type: application/json' -d '{\"dashboardId\":\"x\",\"command\":{\"type\":\"undo\",\"payload\":{}}}')",
+      "Bash(kill %1)",
+      "Bash(NODE_ENV=production PORT=4124 npx tsx src/server.ts)",
+      "Bash(curl -s -o /dev/null -w \"prod NODE_ENV -> execute: %{http_code}\\\\n\" -X POST http://localhost:4124/api/commands/execute -H 'Content-Type: application/json' -d '{\"dashboardId\":\"x\",\"command\":{\"type\":\"undo\",\"payload\":{}}}')",
+      "Bash(curl -s -o /dev/null -w \"prod NODE_ENV -> schema:  %{http_code}\\\\n\" http://localhost:4124/api/commands/schema)",
+      "Bash(python -)",
+      "Bash(npx tsx *)",
+      "Bash(npm run *)",
+      "Bash(grep -vE \"^$|^>\")",
+      "Bash(node --import tsx --test src/ai/__tests__/reference.test.ts)",
+      "Bash(python3 -)",
+      "Bash(curl -s http://localhost:4000/api/health)",
+      "Read(//tmp/**)",
+      "Bash(curl -s -X PATCH http://localhost:4000/api/dashboards/__TRACKED_VAR__ -H 'Content-Type: application/json' -d '{\"type\":\"ATTACH_DATASET\",\"payload\":{\"datasetId\":\"__TRACKED_VAR__\"},\"origin\":\"user\"}')",
+      "Bash(curl -s -X PATCH http://localhost:4000/api/dashboards/__TRACKED_VAR__ -H 'Content-Type: application/json' -d '{\"type\":\"CREATE_VISUAL\",\"payload\":{\"pageId\":\"__TRACKED_VAR__\",\"kind\":\"bar\",\"title\":\"Bad Chart 2\",\"datasetId\":\"fccf8e89-1dbc-459e-9e70-fb95c4255b61\",\"encoding\":{\"xField\":\"region\",\"measures\":[{\"field\":\"clicks\",\"aggregation\":\"sum\"}]}},\"origin\":\"user\"}')",
+      "Bash(curl -s http://localhost:4000/api/dashboards/6e04c53a-9afa-4c12-b3b7-01d61493df66)",
+      "Bash(node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\);process.stdin.on\\('end',\\(\\)=>{const j=JSON.parse\\(d\\);console.log\\(JSON.stringify\\(j.data.dashboard.datasetIds\\)\\)}\\)\")",
+      "Bash(npx prisma *)"
+    ]
+  }
+}

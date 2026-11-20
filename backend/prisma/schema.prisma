@@ -1,0 +1,140 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String      @id @default(cuid())
+  email      String      @unique
+  name       String
+  dashboards Dashboard[]
+  datasets   Dataset[]
+  commands   Command[]
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+}
+
+model Dashboard {
+  id             String         @id @default(cuid())
+  title          String
+  description    String?
+  version        Int            @default(1)
+  datasetId      String?
+  dataset        Dataset?       @relation(fields: [datasetId], references: [id], onDelete: SetNull)
+  /** Every dataset id attached to this dashboard (JSON string array); `datasetId` is always one of these when set. */
+  datasetIdsJson String         @default("[]")
+  stateJson      String? // Full JSON snapshot of DashboardState for fast reads
+  createdById    String?
+  createdBy      User?          @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  pages          Page[]
+  commands       Command[]
+  commandBatches CommandBatch[]
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+}
+
+model Page {
+  id               String    @id @default(cuid())
+  dashboardId      String
+  dashboard        Dashboard @relation(fields: [dashboardId], references: [id], onDelete: Cascade)
+  title            String
+  order            Int       @default(0)
+  layoutConfigJson String    @default("{\"columns\":12,\"rowHeight\":50,\"margin\":[10,10]}")
+  visualsJson      String    @default("[]")
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  @@index([dashboardId])
+}
+
+model Command {
+  id             String        @id @default(cuid())
+  dashboardId    String
+  dashboard      Dashboard     @relation(fields: [dashboardId], references: [id], onDelete: Cascade)
+  action         String
+  origin         String        @default("user")
+  prompt         String?
+  status         String        @default("applied")
+  payloadJson    String
+  errorMessage   String?
+  sequenceNumber Int           @default(1)
+  userId         String?
+  user           User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
+  /**
+   * The atomic undo/redo unit this command was committed as part of.
+   */
+  batchId        String?
+  batch          CommandBatch? @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  createdAt      DateTime      @default(now())
+
+  @@index([dashboardId])
+  @@index([createdAt])
+  @@index([batchId])
+}
+
+/**
+ * One atomic undo/redo step. A single manual edit is one command in one
+ * batch; an AI turn that proposes several commands is still one batch, so
+ * undo reverts (and redo reapplies) the whole thing together, never one
+ * sub-command at a time.
+ * `previousStateJson` / `resultingStateJson` are full DashboardState
+ * snapshots taken immediately before and after this batch applied. Undo/redo
+ * restore directly from these — no replay, so there is nothing to
+ * "re-derive" and nothing that can silently drift from what actually ran.
+ */
+model CommandBatch {
+  id                 String    @id @default(cuid())
+  dashboardId        String
+  dashboard          Dashboard @relation(fields: [dashboardId], references: [id], onDelete: Cascade)
+  /**
+   * "manual" (a person, via the UI) or "ai" (the AI layer).
+   */
+  source             String
+  /**
+   * "applied" | "reverted" | "discarded" (a permanently abandoned redo branch —
+   * set when a new batch is committed after an undo).
+   */
+  status             String    @default("applied")
+  /**
+   * Monotonic position in this dashboard's undo/redo timeline (1-based).
+   */
+  sequenceNumber     Int
+  /**
+   * Short human-readable label, e.g. "Created Sales chart".
+   */
+  summary            String
+  previousStateJson  String
+  resultingStateJson String
+  commands           Command[]
+  createdAt          DateTime  @default(now())
+
+  @@index([dashboardId])
+  @@index([dashboardId, sequenceNumber])
+}
+
+model Dataset {
+  id             String      @id @default(cuid())
+  name           String
+  description    String?
+  rowCount       Int         @default(0)
+  columnCount    Int         @default(0)
+  schemaJson     String
+  sampleRowsJson String      @default("[]")
+  storagePath    String?
+  sourceFileName String?
+  sourceFileType         String?
+  fileSizeBytes          Int?
+  sourceType             String?     @default("file")
+  sourceConfigJson       String?
+  lastSyncedAt           DateTime?
+  refreshIntervalSeconds Int?        @default(0)
+  createdById            String?
+  createdBy              User?       @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  dashboards             Dashboard[]
+  createdAt              DateTime    @default(now())
+  updatedAt              DateTime    @updatedAt
+}

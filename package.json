@@ -1,0 +1,29 @@
+{
+  "name": "ai-native-dashboard-builder",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AI-Native Conversational Dashboard Builder monorepo",
+  "workspaces": [
+    "frontend",
+    "backend",
+    "packages/*",
+    "e2e"
+  ],
+  "scripts": {
+    "dev": "concurrently -n \"backend,frontend\" -c \"cyan,magenta\" \"npm run dev -w backend\" \"npm run dev -w frontend\"",
+    "dev:backend": "npm run dev -w backend",
+    "dev:frontend": "npm run dev -w frontend",
+    "build": "npm run build -w @ai-vis/types && npm run build -w backend && npm run build -w frontend",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "prettier": "^3.5.2"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

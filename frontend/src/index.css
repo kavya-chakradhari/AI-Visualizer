@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Default CSS variables, matching the shared DARK_THEME exactly. These are
+ * overwritten at runtime by applyThemeVars() (src/theme/applyTheme.ts) the
+ * instant a DashboardState loads — this block only prevents a flash of
+ * unstyled content before that first effect runs.
+ */
+:root {
+  --color-background: #0f172a;
+  --color-surface: #1e293b;
+  --color-text: #f1f5f9;
+  --color-muted-text: #94a3b8;
+  --color-primary: #0284c7;
+  --color-secondary: #8b5cf6;
+  --color-success: #16a34a;
+  --color-warning: #fbbf24;
+  --color-danger: #dc2626;
+  --color-border: #64748b;
+
+  --font-family: "Plus Jakarta Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-size-xs: 11px;
+  --font-size-sm: 12px;
+  --font-size-base: 14px;
+  --font-size-lg: 16px;
+  --font-size-xl: 20px;
+  --font-size-xxl: 28px;
+
+  --radius: 12px;
+  --shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.5);
+
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 24px;
+
+  color-scheme: dark;
+  font-family: var(--font-family);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--color-background);
+  color: var(--color-text);
+}
+
+/* Visible focus ring everywhere, for keyboard navigation — never suppressed. */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
